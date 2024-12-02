@@ -1,4 +1,4 @@
-# TREE_META
+# TREE-META
 This is initially a placeholder for a copy of the implementation originally at https://github.com/lugon/TREE-META
 
 The original author deleted his repository, and I believed that I had accidentally deleted the copy which I had downloaded. I find, however, that I still have it.
