@@ -1,3 +1,15 @@
+## Provenance
+
+Between December 1st 2024 and March 4th 2025 this was a placeholder for a copy of the implementation originally at https://github.com/lugon/TREE-META, with no other content.
+
+The original author deleted his repository, and I believed that I had accidentally deleted the copy which I had downloaded. I find, however, that I still have it.
+
+However the files have no definite indication of authorship, no expression of copyright, and no attached license.
+
+Despite indicating here and on the Wikipedia talk page [https://en.wikipedia.org/wiki/Talk:TREE-META#Example_implementation_sources] that I intended to republish the files, and attempting to contact the author via his only other project on Github (which is empty), I have received no indication of an objection.
+
+I have applied GPL v3 to this repository, since I believe that it is the best way to protect the original author's rights. If anybody can "show cause" that this is inappropriate, please raise it as an issue. MarkMLl
+
 ## Description
 
 This is an implementation of the [TREE-META](https://en.wikipedia.org/wiki/TREE-META)
