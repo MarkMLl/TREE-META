@@ -1,0 +1,15 @@
+BEGIN
+NEW ALPHA,BETA,GAMMA,D,E,F ;
+D:=1 ;
+ALPHA:= -D+3 ;
+IF ALPHA+2 # -D THEN
+BEGIN
+    BETA:=4 ;
+    E:=7 ;
+    F:=0
+END
+ELSE
+    GAMMA :=-ALPHA ;
+
+BETA:= -(BETA+4) + ALPHA
+END

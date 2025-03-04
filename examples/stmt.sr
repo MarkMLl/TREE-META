@@ -1,0 +1,8 @@
+.IF A >= 0 .THEN
+    .IF B >= 0 .THEN
+        C = D
+    .ELSE
+        E = F
+.ELSE
+    J = K
+.END
