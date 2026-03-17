@@ -1,0 +1,160 @@
+/*
+ *
+ * TREE-META language grammar in EBNF.
+ *
+ * The tokens are:
+ *   -> ID (identifier): sequence of letters and decimal digits starting with a letter.
+ *   -> INT (decimal integer): sequence of decimal digits.
+ *   -> STR (string): sequence of characters enclosed in single quotes.
+ *
+ */
+
+/* ===========================================================================*/
+/*      TREE-META PROGRAM
+
+    Currently prefixes are recognized but do not have any effect.
+*/
+/* ===========================================================================*/
+
+program = ".META" ID prefixlist rulelist ".END" ;
+prefixlist = prefix { prefix } ;
+rulelist = rule { rule } ;
+prefix = ".LIST"
+       | ".DELIM" "(" INT "," INT "," INT ")" ;
+rule = syntaxrule
+     | coderule
+     | symbolrule ;
+
+
+/* ===========================================================================*/
+/*          SYNTAX RULES                                                      */
+/* ===========================================================================*/
+
+syntaxrule = ID "=" alternativelist ";" ;
+alternativelist = alternative { "/" alternative } ;
+alternative = test [ qtestlist ]
+            | "<-" testlist ;
+testlist = test { test } ;
+qtestlist = qtest { qtest } ;
+test = ntest
+     | stest ;
+qtest = ntest
+      | stest [ "?" integerorstring "?" ] ;
+integerorstring = INT
+                | STR ;
+
+stest = STR
+      | "." STR
+      | ID
+      | "@" INT
+      | ".EMPTY"
+      | "(" aternativelist ")"
+      | "$" stest
+      | basictype ;
+
+basictype = ".NUM"
+          | ".ID"
+          | ".OCT"
+          | ".HEX"
+          | ".SR"
+          | ".CHR"
+          | ".DIG"
+          | ".LET" ;
+
+ntest = ":" ID
+      | ":" ID "[" INT "]"
+      | "[" INT "]"
+      | "+" STR
+      | "*" "*"
+      | "*" ;
+
+
+/* ===========================================================================*/
+/*          CODE RULES                                                        */
+/* ===========================================================================*/
+
+coderule = ID outrulelist ";"
+         | simplecoderule ";" ;
+outrulelist = outrule { outrule } ;
+outrule = "[" [ nodetest ] "]" "=>" outexpression ;
+nodetest = item { "," item } ;
+item = "-"
+     | ID "[" [ nodetest ] "]"
+     | STR
+     | nodename
+     | label
+     | basictype ;
+outexpression = outalternative { "/" outalternative } ;
+outalternative = outitem { outitem } ;
+outitem = outputtext
+        | nodename
+        | ID "[" [ arglist ] "]"
+        | arithmetic
+        | "(" outexpression ")"
+        | ".EMPTY"
+        | label ;
+outputtext = "%"
+           | STR
+           | "!" STR
+           | "@" INT ;
+nodename = "*" INT { ":" "*" INT } ;
+arglist = argmnt { "," argmnt } ;
+argmnt = nodename
+       | label
+       | STR ;
+simplecoderule = ID "/" "=>" simpleoutexpression
+               | ID "/" "=>" ".EMPTY" ;
+simpleoutexpression = outputtext { outputtext } ;
+label = "#1"
+      | "#2"
+      | "#3"
+      | "#4" ;
+
+
+/* ===========================================================================*/
+/*          SYMBOL TABLE                                                      */
+/* ===========================================================================*/
+
+symbolrule = ID ":=" outexpression ";"
+
+
+/* ===========================================================================*/
+/*          ARITHMETIC
+
+    The arithmetic expressions recognized by the compiler are similar to those
+    found in C, with the same associativity and precedence.
+
+    Signed or unsigned arithmetic is performed depending on the operator used:
+        //, /: signed and unsigned division respectively
+        %%, %: signed and unsigned modulo respectively
+        >>>, >>: signed and unsigned shift-right respectively
+
+    Relational operators are unsigned by default. You can force a comparison
+    to be signed by writing "/+" after the operator, for example
+        A > B       // unsigned greater than
+        A >/+ B     // signed greater than
+
+    the OUT[] function is used to output unsigned decimal numbers, and OUTS[]
+    to output signed decimal numbers.
+*/
+/* ===========================================================================*/
+
+function = ID "[" ( nodename | expression ) "]" ;
+primary_expr = ID
+             | INT
+             | function
+             | "(" expression ")" ;
+unary_expr = [ "+" | "-" | "~" | "!" ] primary_expr ;
+mult_expr = unary_expr { ( "*" | "/" | "//" | "%" | "%%" ) unary_expr } ;
+add_expr = mult_expr { ( "+" | "-" ) mult_expr } ;
+shift_expr = add_expr { ( "<<" | ">>" | ">>>" ) add_expr } ;
+AND_expr = shift_expr { "&" shift_expr } ;
+excl_OR_expr = AND_expr { "^" AND_expr } ;
+expression = excl_OR_expr { "|" excl_OR_expr } ;
+relation = ID ( "=" | "#" | ">" | "<" | ">=" | "<=" ) [ "/" "+" ] expression ;
+assignment = ID "<-" expression ;
+arith = assignment
+      | function
+      | relation ;
+arithlist = arith { ";" arith } ;
+arithmetic = "<" arithlist ">" ;
