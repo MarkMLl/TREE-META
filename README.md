@@ -108,7 +108,7 @@ and the result:
  - [Tree Meta in the On-Line System (NLS)][8]
  - Alan Kay about Tree Meta, [here][9] and [here][10]
 
-[1]: http://www.chilton-computing.org.uk/acl/literature/manuals/tree-meta/contents.htm
+[1]: [http://www.chilton-computing.org.uk/acl/literature/manuals/tree-meta/contents.htm](http://www.chilton-computing.org.uk/acl/literature/manuals/tree-meta/contents.htm)
 [2]: http://bitsavers.org/pdf/sri/arc/rulifson/A_Tree_Meta_For_The_XDS_940_Appendix_D_Apr68.pdf
 [3]: http://www.ibm-1401.info/Meta-II-schorre.pdf
 [4]: https://ntrl.ntis.gov/NTRL/dashboard/searchResults/titleDetail/AD855122.xhtml
